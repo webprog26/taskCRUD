@@ -1,14 +1,22 @@
 package com.example.webprog26.taskcrud.models;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.io.Serializable;
+
 /**
  * Created by webprog26 on 28.11.2016.
  */
 
-public class User {
+public class User implements Serializable{
 
+    @SerializedName("id")
     private long mUserId;
+    @SerializedName("user_name")
     private String mUserName;
+    @SerializedName("user_second_name")
     private String mUserSecondName;
+    @SerializedName("user_city")
     private String mUserCity;
 
     public long getUserId() {
@@ -55,5 +63,10 @@ public class User {
         public User build(){
             return User.this;
         }
+    }
+
+    @Override
+    public String toString() {
+        return "name " + getUserName() + ", second name " + getUserSecondName() + ", city " + getUserCity();
     }
 }
