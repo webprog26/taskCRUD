@@ -9,7 +9,7 @@ import java.util.List;
  * Created by webprog26 on 28.11.2016.
  */
 
-public class UserResponse implements Serializable{
+public class UserResponse {
 
     @SerializedName("users")
     private List<User> mUserList = null;

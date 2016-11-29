@@ -8,9 +8,9 @@ import java.io.Serializable;
  * Created by webprog26 on 28.11.2016.
  */
 
-public class User implements Serializable{
+public class User {
 
-    @SerializedName("id")
+    @SerializedName("user_id")
     private long mUserId;
     @SerializedName("user_name")
     private String mUserName;
