@@ -7,17 +7,20 @@ import android.util.Log;
 
 import com.example.webprog26.taskcrud.adapters.UserListAdapter;
 import com.example.webprog26.taskcrud.fragments.FragmentUsersList;
-import com.example.webprog26.taskcrud.interfaces.OnUserListItemClickListener;
+import com.example.webprog26.taskcrud.interfaces.OnUserActionListener;
 import com.example.webprog26.taskcrud.interfaces.OnUserListLoadedListener;
 import com.example.webprog26.taskcrud.interfaces.UserApiInterface;
 import com.example.webprog26.taskcrud.managers.ApiClient;
 import com.example.webprog26.taskcrud.models.User;
 import com.example.webprog26.taskcrud.models.UserResponse;
+
+import java.util.List;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements OnUserListLoadedListener, OnUserListItemClickListener{
+public class MainActivity extends AppCompatActivity implements OnUserListLoadedListener, OnUserActionListener {
 
     private static final String TAG = "MainActivity_TAG";
 
@@ -43,10 +46,10 @@ public class MainActivity extends AppCompatActivity implements OnUserListLoadedL
     public void onUserListItemClicked(User user, int action) {
         switch (action){
             case UserListAdapter.UserListViewHolder.EDIT_USER:
-                Log.i(TAG, "user " + user.getUserName() + ", with id " + user.getUserId() + " is ready to edit");
+                mFragmentUsersList.showUserDialog(user, action);
                 break;
             case UserListAdapter.UserListViewHolder.DELETE_USER:
-                Log.i(TAG, "user " + user.getUserName() + ", with id " + user.getUserId() + " is ready to delete");
+                deleteUser(user);
                 break;
         }
     }
@@ -54,14 +57,78 @@ public class MainActivity extends AppCompatActivity implements OnUserListLoadedL
     @Override
     public void onUserListLoaded() {
 
-        Call<UserResponse> call = mUserApiInterface.getUsers();
-        call.enqueue(new Callback<UserResponse>() {
+        Call<UserResponse> readUsersCall = mUserApiInterface.getUsers();
+        readUsersCall.enqueue(new Callback<UserResponse>() {
             @Override
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                 Log.i(TAG, "Response code: " + response.code());
                 UserResponse userResponse = new UserResponse();
-                userResponse.setUserList(response.body().getUserList());
-                mFragmentUsersList.updateList(userResponse);
+                List<User> userList = response.body().getUserList();
+                if(userList != null){
+                    userResponse.setUserList(userList);
+                    mFragmentUsersList.updateList(userResponse);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserResponse> call, Throwable t) {
+                Log.e(TAG, t.toString());
+            }
+        });
+    }
+
+    @Override
+    public void addUser(User user) {
+        Log.i(TAG, "Add request for " + user.toString());
+        Call<UserResponse> addUserCall = mUserApiInterface.addUser(user.getUserName(),
+                                                                   user.getUserSecondName(),
+                                                                   user.getUserCity());
+        addUserCall.enqueue(new Callback<UserResponse>() {
+            @Override
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                int responseCode = response.body().getResponseAnswer();
+                Log.i(TAG, "Responce code addUser " + responseCode);
+                onUserListLoaded();
+            }
+
+            @Override
+            public void onFailure(Call<UserResponse> call, Throwable t) {
+                Log.e(TAG, t.toString());
+            }
+        });
+    }
+
+    @Override
+    public void editUser(User user) {
+        Log.i(TAG, "Edit request " + user.toString() + ", with id " + user.getUserId());
+        Call<UserResponse> editUserCall = mUserApiInterface.editUser(user.getUserId(),
+                                                                     user.getUserName(),
+                                                                     user.getUserSecondName(),
+                                                                     user.getUserCity());
+        editUserCall.enqueue(new Callback<UserResponse>() {
+            @Override
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                int responseCode = response.body().getResponseAnswer();
+                Log.i(TAG, "Responce code editUser " + responseCode);
+                onUserListLoaded();
+            }
+
+            @Override
+            public void onFailure(Call<UserResponse> call, Throwable t) {
+                Log.e(TAG, t.toString());
+            }
+        });
+    }
+
+    @Override
+    public void deleteUser(User user) {
+        Call<UserResponse> deleteUserCall = mUserApiInterface.deleteUser(user.getUserId());
+        deleteUserCall.enqueue(new Callback<UserResponse>() {
+            @Override
+            public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+                int responseCode = response.body().getResponseAnswer();
+                Log.i(TAG, "Responce code deleteUser " + responseCode);
+                onUserListLoaded();
             }
 
             @Override

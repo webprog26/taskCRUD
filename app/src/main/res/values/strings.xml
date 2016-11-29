@@ -8,4 +8,5 @@
     <string name="hint_user_name">User name</string>
     <string name="hint_user_second_name">User second name</string>
     <string name="hint_user_city">User city</string>
+    <string name="add_user">Add user</string>
 </resources>

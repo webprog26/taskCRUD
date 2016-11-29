@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Created by webprog26 on 28.11.2016.
  */
 
-public class User {
+public class User implements Serializable{
 
     @SerializedName("user_id")
     private long mUserId;

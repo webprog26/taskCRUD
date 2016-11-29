@@ -14,11 +14,22 @@ public class UserResponse {
     @SerializedName("users")
     private List<User> mUserList = null;
 
+    @SerializedName("success")
+    private int mResponseAnswer;
+
     public List<User> getUserList() {
         return mUserList;
     }
 
     public void setUserList(List<User> userList) {
         this.mUserList = userList;
+    }
+
+    public int getResponseAnswer() {
+        return mResponseAnswer;
+    }
+
+    public void setResponseAnswer(int responseAnswer) {
+        this.mResponseAnswer = responseAnswer;
     }
 }

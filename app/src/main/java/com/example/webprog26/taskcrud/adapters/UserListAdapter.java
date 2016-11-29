@@ -9,7 +9,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.webprog26.taskcrud.R;
-import com.example.webprog26.taskcrud.interfaces.OnUserListItemClickListener;
+import com.example.webprog26.taskcrud.interfaces.OnUserActionListener;
 import com.example.webprog26.taskcrud.models.User;
 
 import java.util.List;
@@ -42,7 +42,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserLi
 
         }
 
-        public void bind(final User user, final OnUserListItemClickListener onUserListItemClickListener){
+        public void bind(final User user, final OnUserActionListener onUserActionListener){
             mTvUserName.setText(user.getUserName());
             mTvUserSecondName.setText(user.getUserSecondName());
             mTvUserCity.setText(mContext.getResources().getString(R.string.lives_in, user.getUserCity()));
@@ -50,14 +50,14 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserLi
             mIbEditUser.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onUserListItemClickListener.onUserListItemClicked(user, EDIT_USER);
+                    onUserActionListener.onUserListItemClicked(user, EDIT_USER);
                 }
             });
 
             mIbDeleteUser.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onUserListItemClickListener.onUserListItemClicked(user, DELETE_USER);
+                    onUserActionListener.onUserListItemClicked(user, DELETE_USER);
                 }
             });
         }
@@ -66,12 +66,12 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserLi
 
     private Context mContext;
     private List<User> mUserList;
-    private OnUserListItemClickListener mOnUserListItemClickListener;
+    private OnUserActionListener mOnUserActionListener;
 
-    public UserListAdapter(Context context, List<User> userList, OnUserListItemClickListener onUserListItemClickListener) {
+    public UserListAdapter(Context context, List<User> userList, OnUserActionListener onUserActionListener) {
         this.mContext = context;
         this.mUserList = userList;
-        this.mOnUserListItemClickListener = onUserListItemClickListener;
+        this.mOnUserActionListener = onUserActionListener;
     }
 
     @Override
@@ -83,7 +83,7 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserLi
 
     @Override
     public void onBindViewHolder(UserListViewHolder holder, int position) {
-        holder.bind(mUserList.get(position), mOnUserListItemClickListener);
+        holder.bind(mUserList.get(position), mOnUserActionListener);
     }
 
 
