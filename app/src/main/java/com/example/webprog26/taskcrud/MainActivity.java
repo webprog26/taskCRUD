@@ -27,8 +27,6 @@ public class MainActivity extends AppCompatActivity implements OnUserListLoadedL
     private UserApiInterface mUserApiInterface;
     private FragmentUsersList mFragmentUsersList;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,10 +44,10 @@ public class MainActivity extends AppCompatActivity implements OnUserListLoadedL
     public void onUserListItemClicked(User user, int action) {
         switch (action){
             case UserListAdapter.UserListViewHolder.EDIT_USER:
-                mFragmentUsersList.showUserDialog(user, action);
+                mFragmentUsersList.showAddOrEditUserDialog(user, action);
                 break;
             case UserListAdapter.UserListViewHolder.DELETE_USER:
-                deleteUser(user);
+                mFragmentUsersList.showConfirmDeleteUserDialog(user.getUserId(), user.getUserName());
                 break;
         }
     }
@@ -121,8 +119,12 @@ public class MainActivity extends AppCompatActivity implements OnUserListLoadedL
     }
 
     @Override
-    public void deleteUser(User user) {
-        Call<UserResponse> deleteUserCall = mUserApiInterface.deleteUser(user.getUserId());
+    public void deleteUser(long userId) {
+        if(userId == 0){
+            return;
+        }
+
+        Call<UserResponse> deleteUserCall = mUserApiInterface.deleteUser(userId);
         deleteUserCall.enqueue(new Callback<UserResponse>() {
             @Override
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {

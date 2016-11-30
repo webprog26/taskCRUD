@@ -11,5 +11,5 @@ public interface OnUserActionListener {
     public void onUserListItemClicked(User user, int action);
     public void addUser(User user);
     public void editUser(User user);
-    public void deleteUser(User user);
+    public void deleteUser(long userId);
 }
