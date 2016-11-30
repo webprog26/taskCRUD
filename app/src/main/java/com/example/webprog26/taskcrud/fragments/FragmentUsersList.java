@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 
 import com.example.webprog26.taskcrud.R;
 import com.example.webprog26.taskcrud.adapters.UserListAdapter;
+import com.example.webprog26.taskcrud.dialogs.ConfirmDeletingDialog;
 import com.example.webprog26.taskcrud.dialogs.UserDialog;
 import com.example.webprog26.taskcrud.interfaces.OnUserActionListener;
 import com.example.webprog26.taskcrud.interfaces.OnUserListLoadedListener;
@@ -41,8 +42,10 @@ public class FragmentUsersList extends Fragment{
     private OnUserActionListener mOnUserActionListener;
 
     private static final String USER_DIALOG = "user_dialog";
+    private static final String CONFIRM_USER_DELETE_DIALOG = "confirm_user_delete_dialog";
     private static final int USER_EDIT_REQUEST = 400;
     private static final int USER_ADD_REQUEST = 401;
+    private static final int CONFIRM_DELETE_USER_REQUEST = 402;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,11 +81,11 @@ public class FragmentUsersList extends Fragment{
         userListRecyclerView.setAdapter(mListAdapter);
         mOnUserListLoadedListener.onUserListLoaded();
 
-        FloatingActionButton btnAddUser = (FloatingActionButton) view.findViewById(R.id.btnAddUser);
+        final FloatingActionButton btnAddUser = (FloatingActionButton) view.findViewById(R.id.btnAddUser);
         btnAddUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showUserDialog(null, UserDialog.MODE_ADD_USER);
+                showAddOrEditUserDialog(null, UserDialog.MODE_ADD_USER);
             }
         });
     }
@@ -91,7 +94,16 @@ public class FragmentUsersList extends Fragment{
         mListAdapter.updateAdapterData(userResponse.getUserList());
     }
 
-    public void showUserDialog(User user, int action){
+    public void showConfirmDeleteUserDialog(long userToDeleteId, String userToDeleteName){
+        FragmentManager fragmentManager = getChildFragmentManager();
+
+        ConfirmDeletingDialog deletingDialog = ConfirmDeletingDialog.newInstance(userToDeleteId, userToDeleteName);
+        deletingDialog.setTargetFragment(FragmentUsersList.this, CONFIRM_DELETE_USER_REQUEST);
+
+        deletingDialog.show(fragmentManager, CONFIRM_USER_DELETE_DIALOG);
+    }
+
+    public void showAddOrEditUserDialog(User user, int action){
         UserDialog userDialog = null;
 
         FragmentManager fragmentManager = getChildFragmentManager();
@@ -108,7 +120,9 @@ public class FragmentUsersList extends Fragment{
         }
 
         if(userDialog != null){
-            userDialog.show(fragmentManager, USER_DIALOG);
+            if(fragmentManager.findFragmentByTag(USER_DIALOG) == null){//prevents opening new dialog while it's previous instance was'nt closed
+                userDialog.show(fragmentManager, USER_DIALOG);
+            }
         }
 
     }
@@ -119,15 +133,18 @@ public class FragmentUsersList extends Fragment{
         if(resultCode != Activity.RESULT_OK){
             return;
         }
-
-        User user = (User) data.getSerializableExtra(UserDialog.USER_DATA);
-
+        User user;
         switch (requestCode){
             case USER_EDIT_REQUEST:
+                user = (User) data.getSerializableExtra(UserDialog.USER_DATA);
                 mOnUserActionListener.editUser(user);
                 break;
             case USER_ADD_REQUEST:
+                user = (User) data.getSerializableExtra(UserDialog.USER_DATA);
                 mOnUserActionListener.addUser(user);
+                break;
+            case CONFIRM_DELETE_USER_REQUEST:
+                mOnUserActionListener.deleteUser(data.getLongExtra(ConfirmDeletingDialog.USER_ID_TO_DELETE, 0));
                 break;
             default:
                 new Exception("Unexpected request code").printStackTrace();

@@ -35,6 +35,7 @@ public class UserDialog extends DialogFragment implements View.OnClickListener{
 
     private int mUserDialogMode;
     private long mUserId;
+    private String mUserName;
 
     public static UserDialog newInstance(User user, int mode){
         Bundle bundle = new Bundle();
@@ -91,6 +92,7 @@ public class UserDialog extends DialogFragment implements View.OnClickListener{
             User user = (User) getArguments().getSerializable(USER_DATA);
 
             mUserId = user.getUserId();
+            mUserName = user.getUserName();
 
             mEtUserName.setText(user.getUserName());
             mEtUserSecondName.setText(user.getUserSecondName());
@@ -107,7 +109,7 @@ public class UserDialog extends DialogFragment implements View.OnClickListener{
         builder.setView(view);
 
         if(isInEditMode()){
-            builder.setTitle(getResources().getString(R.string.edit_user));
+            builder.setTitle(getResources().getString(R.string.edit_user, mUserName));
         } else if(isInAdditionMode()){
             builder.setTitle(getResources().getString(R.string.add_user));
         } else {

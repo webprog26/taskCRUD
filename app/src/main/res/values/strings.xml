@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">TaskCRUD</string>
     <string name="lives_in">Lives in %1$s</string>
-    <string name="edit_user">Edit user</string>
+    <string name="edit_user">Edit user %1$s</string>
     <string name="delete_user">Delete user</string>
     <string name="btn_ok">Ok</string>
     <string name="btn_cancel">Cancel</string>
@@ -9,4 +9,6 @@
     <string name="hint_user_second_name">User second name</string>
     <string name="hint_user_city">User city</string>
     <string name="add_user">Add user</string>
+    <string name="confirm_delete">Confirm delete user %1$s</string>
+    <string name="user_deleting_warning">Once user has been deleted, you cannot access this data anymore</string>
 </resources>
