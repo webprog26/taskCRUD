@@ -90,6 +90,10 @@ public class FragmentUsersList extends Fragment{
         });
     }
 
+    /**
+     * Updates data with the new one, downloaded from remote database
+     * @param userResponse {@link UserResponse}
+     */
     public void updateList(UserResponse userResponse){
         mListAdapter.updateAdapterData(userResponse.getUserList());
     }
@@ -103,6 +107,13 @@ public class FragmentUsersList extends Fragment{
         deletingDialog.show(fragmentManager, CONFIRM_USER_DELETE_DIALOG);
     }
 
+    /**
+     * Displays dialog with {@link android.widget.EditText} fields
+     * that contains current user data if it has to be edited
+     * or empty fields if new user should be created
+     * @param user {@link User}
+     * @param action int
+     */
     public void showAddOrEditUserDialog(User user, int action){
         UserDialog userDialog = null;
 

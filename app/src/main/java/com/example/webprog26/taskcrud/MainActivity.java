@@ -10,7 +10,7 @@ import com.example.webprog26.taskcrud.fragments.FragmentUsersList;
 import com.example.webprog26.taskcrud.interfaces.OnUserActionListener;
 import com.example.webprog26.taskcrud.interfaces.OnUserListLoadedListener;
 import com.example.webprog26.taskcrud.interfaces.UserApiInterface;
-import com.example.webprog26.taskcrud.managers.ApiClient;
+import com.example.webprog26.taskcrud.clients.ApiClient;
 import com.example.webprog26.taskcrud.models.User;
 import com.example.webprog26.taskcrud.models.UserResponse;
 

@@ -6,5 +6,9 @@ package com.example.webprog26.taskcrud.interfaces;
 
 public interface OnUserListLoadedListener {
 
+    /**
+     * Downloads completely all user data from remote database
+     * to update existing data in {@link com.example.webprog26.taskcrud.adapters.UserListAdapter}
+     */
     public void onUserListLoaded();
 }

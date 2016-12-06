@@ -28,8 +28,4 @@ public class UserResponse {
     public int getResponseAnswer() {
         return mResponseAnswer;
     }
-
-    public void setResponseAnswer(int responseAnswer) {
-        this.mResponseAnswer = responseAnswer;
-    }
 }
