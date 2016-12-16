@@ -98,10 +98,10 @@ public class FragmentUsersList extends Fragment{
         mListAdapter.updateAdapterData(userResponse.getUserList());
     }
 
-    public void showConfirmDeleteUserDialog(long userToDeleteId, String userToDeleteName){
+    public void showConfirmDeleteUserDialog(long userToDeleteId, String userToDeleteName, int position){
         FragmentManager fragmentManager = getChildFragmentManager();
 
-        ConfirmDeletingDialog deletingDialog = ConfirmDeletingDialog.newInstance(userToDeleteId, userToDeleteName);
+        ConfirmDeletingDialog deletingDialog = ConfirmDeletingDialog.newInstance(userToDeleteId, userToDeleteName, position);
         deletingDialog.setTargetFragment(FragmentUsersList.this, CONFIRM_DELETE_USER_REQUEST);
 
         deletingDialog.show(fragmentManager, CONFIRM_USER_DELETE_DIALOG);
@@ -156,6 +156,7 @@ public class FragmentUsersList extends Fragment{
                 break;
             case CONFIRM_DELETE_USER_REQUEST:
                 mOnUserActionListener.deleteUser(data.getLongExtra(ConfirmDeletingDialog.USER_ID_TO_DELETE, 0));
+                removeDeletedUser(data.getIntExtra(ConfirmDeletingDialog.USER_POSITION_IN_LIST_TO_DELETE, -1));
                 break;
             default:
                 new Exception("Unexpected request code").printStackTrace();
@@ -167,5 +168,16 @@ public class FragmentUsersList extends Fragment{
         super.onDetach();
         mOnUserListLoadedListener = null;
         mOnUserActionListener = null;
+    }
+
+    /**
+     * Calls adapter's method removeUserFromList(int position)
+     * @param position int
+     */
+    private void removeDeletedUser(int position){
+        if(position < 0 || mListAdapter == null){
+            return;
+        }
+        mListAdapter.removeUserFromList(position);
     }
 }
