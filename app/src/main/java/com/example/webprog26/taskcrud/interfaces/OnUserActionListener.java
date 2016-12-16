@@ -14,7 +14,7 @@ public interface OnUserActionListener {
      * @param action int
      */
 
-    public void onUserListItemClicked(User user, int action);
+    public void onUserListItemClicked(User user, int action, int position);
 
     /**
      * Adds new user to remote database via API methods

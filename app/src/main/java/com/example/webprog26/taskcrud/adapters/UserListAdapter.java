@@ -50,14 +50,14 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserLi
             mIbEditUser.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onUserActionListener.onUserListItemClicked(user, EDIT_USER);
+                    onUserActionListener.onUserListItemClicked(user, EDIT_USER, getAdapterPosition());
                 }
             });
 
             mIbDeleteUser.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    onUserActionListener.onUserListItemClicked(user, DELETE_USER);
+                    onUserActionListener.onUserListItemClicked(user, DELETE_USER, getAdapterPosition());
                 }
             });
         }
@@ -95,5 +95,15 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserLi
     public void updateAdapterData(List<User> data){
         this.mUserList = data;
         notifyDataSetChanged();
+    }
+
+    /**
+     * Removes deleted user from list, notifies adapter, that item has been removed,
+     * so there is no need to load all the users from remote database every time we delete some data
+     * @param position int
+     */
+    public void removeUserFromList(int position){
+        mUserList.remove(position);
+        notifyItemRemoved(position);
     }
 }

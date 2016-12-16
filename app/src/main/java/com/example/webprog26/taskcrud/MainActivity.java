@@ -41,13 +41,13 @@ public class MainActivity extends AppCompatActivity implements OnUserListLoadedL
     }
 
     @Override
-    public void onUserListItemClicked(User user, int action) {
+    public void onUserListItemClicked(User user, int action, int position) {
         switch (action){
             case UserListAdapter.UserListViewHolder.EDIT_USER:
                 mFragmentUsersList.showAddOrEditUserDialog(user, action);
                 break;
             case UserListAdapter.UserListViewHolder.DELETE_USER:
-                mFragmentUsersList.showConfirmDeleteUserDialog(user.getUserId(), user.getUserName());
+                mFragmentUsersList.showConfirmDeleteUserDialog(user.getUserId(), user.getUserName(), position);
                 break;
         }
     }
@@ -130,7 +130,6 @@ public class MainActivity extends AppCompatActivity implements OnUserListLoadedL
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
                 int responseCode = response.body().getResponseAnswer();
                 Log.i(TAG, "Responce code deleteUser " + responseCode);
-                onUserListLoaded();
             }
 
             @Override

@@ -23,14 +23,17 @@ public class ConfirmDeletingDialog extends DialogFragment implements View.OnClic
 
     private long mUserToDeleteId;
     private String mUserNameToDelete;
+    private int mUserPositionInListToDelete;
 
     public static final String USER_ID_TO_DELETE = "com.example.webprog26.taskcrud.user_id_to_delete";
     public static final String USER_NAME_TO_DELETE = "com.example.webprog26.taskcrud.user_name_to_delete";
+    public static final String USER_POSITION_IN_LIST_TO_DELETE = "com.example.webprog26.taskcrud.user_position_in_list_to_delete";
 
-    public static ConfirmDeletingDialog newInstance(long userId, String userName){
+    public static ConfirmDeletingDialog newInstance(long userId, String userName, int position){
         Bundle bundle = new Bundle();
         bundle.putLong(USER_ID_TO_DELETE, userId);
         bundle.putString(USER_NAME_TO_DELETE, userName);
+        bundle.putInt(USER_POSITION_IN_LIST_TO_DELETE, position);
 
         ConfirmDeletingDialog deletingDialog = new ConfirmDeletingDialog();
         deletingDialog.setArguments(bundle);
@@ -45,6 +48,7 @@ public class ConfirmDeletingDialog extends DialogFragment implements View.OnClic
         {
             mUserToDeleteId = getArguments().getLong(USER_ID_TO_DELETE);
             mUserNameToDelete = getArguments().getString(USER_NAME_TO_DELETE);
+            mUserPositionInListToDelete = getArguments().getInt(USER_POSITION_IN_LIST_TO_DELETE);
         }
     }
 
@@ -86,6 +90,7 @@ public class ConfirmDeletingDialog extends DialogFragment implements View.OnClic
 
         Intent intent = new Intent();
         intent.putExtra(USER_ID_TO_DELETE, userToDeleteId);
+        intent.putExtra(USER_POSITION_IN_LIST_TO_DELETE, mUserPositionInListToDelete);
 
         getTargetFragment().onActivityResult(getTargetRequestCode(), resultCode, intent);
     }
